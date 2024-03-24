@@ -64,7 +64,8 @@ def make_pat():
 
 
 prog = make_pat()
-idprog = re.compile(r"\s+(\w+)")
+idprog = re.compile(r"\s+([\w℮\u2118][\w·\u0387℮\u2118]*)") # Allows XID_Continue characters such as · U+00B7 to be highlighted in 
+                                                            # function and class definitions.
 prog_group_name_to_tag = {
     "MATCH_SOFTKW": "KEYWORD",
     "CASE_SOFTKW": "KEYWORD",
@@ -170,6 +171,9 @@ class ColorDelegator(Delegator):
             "SYNC": {'background': None, 'foreground': None},
             "TODO": {'background': None, 'foreground': None},
             "ERROR": idleConf.GetHighlight(theme, "error"),
+            "console": idleConf.GetHighlight(theme, "console"), # Why was it removed in Python 3.10?
+            # The "console" tag lets "[DEBUG ON]" and "[DEBUG OFF]" to have the same colour as ">>>".
+            # ─────────────────────────────────────────────────────
             # "hit" is used by ReplaceDialog to mark matches. It shouldn't be changed by Colorizer, but
             # that currently isn't technically possible. This should be moved elsewhere in the future
             # when fixing the "hit" tag's visibility, or when the replace dialog is replaced with a
